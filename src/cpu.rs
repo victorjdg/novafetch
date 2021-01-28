@@ -16,7 +16,7 @@ fn parse_cpu_info(info: String) -> Vec<String> {
     let vendor_check: Vec<&str> = name_check.split("@").collect();
     if vendor_check.len() > 1 {
         // Intel
-        res.push(vendor_check[0].to_string());
+        res.push(vendor_check[0].trim_end().to_string());
         // CPU max freq
         let cpu_long_max_freq = info_vec[16].to_string();
         let cpu_max_freq_str: Vec<&str> = cpu_long_max_freq.split_whitespace().collect();
@@ -46,7 +46,7 @@ fn pretty_cpu_info(vec_info: Vec<String>) -> String {
     let model_name = &vec_info[1];
     let core_count = &vec_info [0];
     let max_frequency = &vec_info[2];
-    let res = format!("{} ({}) {}GHz", model_name, core_count, max_frequency);
+    let res = format!("{} ({}) @ {} GHz", model_name, core_count, max_frequency);
 
     res
 }
