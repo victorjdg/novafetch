@@ -8,11 +8,26 @@ It is currently able to show the following informaton:
 * CPU
 * GPU
 
-## Usage
+## Installing / Unistalling
+Installing:
+```bash
+make
+sudo make install
+```
 
+Unistalling
+```bash
+sudo make unistall
+```
+
+## Usage
 ### Show all avaliable information
 ```bash
 cargo run
+```
+If you choose to install rustfetch you can access the information with:
+```bash
+rustfetch
 ```
 
 ### Option support
