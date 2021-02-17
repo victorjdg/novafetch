@@ -17,7 +17,7 @@ use gpu::gpu_info;
 fn main() {
     let options: Vec<String> = env::args().collect();
     if options.len() > 1 {
-        let valid_options = options[2 .. options.len()].to_vec();
+        let valid_options = options[1 .. options.len()].to_vec();
         for option in valid_options {
             match option.as_str() {
                 "-o" | "-O" | "-os" | "-OS" => println!("OS: {}", os_info()),

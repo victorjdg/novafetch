@@ -22,7 +22,7 @@ pub fn motherboard_info() -> String {
             .expect("Failed to execute cat command");
         let motherboard_name = String::from_utf8_lossy(&motherboard_info_command.stdout).to_string();
         let test_output: Vec<&str> = motherboard_name.split_whitespace().collect();
-        if test_output.len() > 1 {
+        if test_output.len() > 1 && motherboard_name != "Chassis Version" {
             res = pretty_motherboard_info(motherboard_name);
         } else {
             let motherboard_info_command = Command::new("cat").arg("/sys/devices/virtual/dmi/id/product_name")

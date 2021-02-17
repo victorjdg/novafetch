@@ -1,5 +1,5 @@
 RUST_RELEASE_BIN_DIR=./target/release
-CLI_EXEC=rustfetch
+CLI_EXEC=novafetch
 RUSTFETCH_EXEC_RELEASE=$(RUST_RELEASE_BIN_DIR)/$(CLI_EXEC)
 
 ifeq ($(PREFIX),)
@@ -10,7 +10,7 @@ $(CLI_EXEC) $(RUSTFETCH_EXEC_RELEASE):
 	cargo build --all --release
 
 install:
-	install $(RUST_RELEASE_BIN_DIR)/$(CLI_EXEC) $(DESTDIR)$(PREFIX)/bin/
+	install $(RUST_RELEASE_BIN_DIR)/$(CLI_EXEC) $(PREFIX)/bin/
 
 unistall:
-	- rm -f $(DESTDIR)$(PREFIX)/bin/$(CLI_EXEC)
+	- rm -f $(PREFIX)/bin/$(CLI_EXEC)
