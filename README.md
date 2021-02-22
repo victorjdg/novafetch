@@ -34,30 +34,30 @@ rustfetch
 The application has support for the following options:
 #### OS
 ```bash
-cargo run main -o|-os|-O|-OS
+novafetch -o|-os|-O|-OS
 ```
 #### Host
 ```bash
-cargo run main -h|-host|-H|-HOST
+novafetch -h|-host|-H|-HOST
 ```
 #### Kernel
 ```bash
-cargo run main -k|-kernel|-K|-KERNEL
+novafetch -k|-kernel|-K|-KERNEL
 ```
 #### Uptime
 ```bash
-cargo run main -u|-uptime|-U|-UPTIME
+novafetch -u|-uptime|-U|-UPTIME
 ```
 #### CPU
 ```bash
-cargo run main -c|-cpu|-C|-CPU
+novafetch -c|-cpu|-C|-CPU
 ```
 #### GPU
 ```bash
-cargo run main -g|-gpu|-G|-GPU
+novafetch -g|-gpu|-G|-GPU
 ```
 
 It also supports multiple options:
 ```bash
-cargo run main -c -g -u
+novafetch -c -g -u
 ```
