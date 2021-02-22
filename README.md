@@ -1,4 +1,4 @@
-rustfetch is a rust tool to get information about your computer-
+novafetch is a rust tool to get information about your computer-
 
 It is currently able to show the following informaton:
 * OS
@@ -25,9 +25,9 @@ sudo make unistall
 ```bash
 cargo run
 ```
-If you choose to install rustfetch you can access the information with:
+If you choose to install novafetch you can access the information with:
 ```bash
-rustfetch
+novafetch
 ```
 
 ### Option support
