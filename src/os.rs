@@ -1,23 +1,26 @@
+use std::collections::HashMap;
 use std::process::Command;
 
-fn parse_os_info(info: String) -> Vec<String> {
-    let mut res: Vec<String> = Vec::new();
+fn parse_os_info(info: String) -> HashMap<String, String> {
+    let mut res: HashMap<String, String> = HashMap::new();
 
     let info_vec: Vec<&str> = info.lines().collect();
-
-    // OS name
-    let long_os_name = info_vec[0].to_string();
-    let os_name: Vec<&str> = long_os_name.split("\"").collect();
-    res.push(os_name[1].to_string());
+    for info in &info_vec {
+        let pair: Vec<&str> = info.split("=").collect();
+        res.insert(pair[0].to_string(), pair[1].to_string());
+    }
 
     res
 }
 
-fn pretty_os_info(vec_info: Vec<String>) -> String {
-    let os_name = &vec_info[0];
-    let res = format!("{}", os_name);
+fn pretty_os_info(os_info: HashMap<String, String>) -> String {
+    let mut res = "";
+    match os_info.get("PRETTY_NAME") {
+        Some(pretty_name) => {res = &pretty_name[1..pretty_name.len()-1]},
+        _ => println!("Unable to get OS name")
+    }
 
-    res
+    res.to_string()
 }
 
 pub fn os_info() -> String {
