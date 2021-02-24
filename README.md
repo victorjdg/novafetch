@@ -6,6 +6,7 @@ It is currently able to show the following informaton:
 * Kernel
 * Uptime
 * CPU
+* Memory
 * GPU
 
 ## Installing / Unistalling
@@ -53,6 +54,10 @@ novafetch -u|-uptime|-U|-UPTIME
 #### CPU
 ```bash
 novafetch -c|-cpu|-C|-CPU
+```
+#### Memory
+```bash
+novafetch -m|-memory|-M|-MEMORY
 ```
 #### GPU
 ```bash
