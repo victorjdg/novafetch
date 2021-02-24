@@ -9,6 +9,8 @@ It is currently able to show the following informaton:
 * GPU
 
 ## Installing / Unistalling
+If you are an Arch Linux user you can install Novafetch through the Arch User Repository. Otherwise you can install it using the following commands:
+
 Installing:
 ```bash
 make
