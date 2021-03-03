@@ -5,6 +5,7 @@ mod kernel;
 mod uptime;
 mod gpu;
 mod memory;
+mod resolution;
 
 use std::env;
 use cpu::cpu_info;
@@ -14,6 +15,7 @@ use kernel::kernel_info;
 use uptime::uptime_info;
 use gpu::gpu_info;
 use memory::memory_info;
+use resolution::resolution_info;
 
 fn main() {
     let options: Vec<String> = env::args().collect();
@@ -28,6 +30,7 @@ fn main() {
                 "-c" | "-C" | "-cpu" | "-CPU" => println!("CPU: {}", cpu_info()),
                 "-m" | "-M" | "-memory" | "-MEMORY" => println!("Memory: {}", memory_info()),
                 "-g" | "-G" | "-gpu" | "-GPU" => println!("GPU: {}", gpu_info()),
+                "-r" | "-R" | "-resolution" | "-RESOLUTION" => println!("Resolution: {}", resolution_info()),
                 _ => println!("Invalid option {}", option),
             }
         }
@@ -38,6 +41,7 @@ fn main() {
         println!("Uptime: {}", uptime_info());
         println!("CPU: {}", cpu_info());
         println!("Memory: {}", memory_info());
+        println!("Resolution: {}", resolution_info());
         println!("GPU: {}", gpu_info());
     }
 }
