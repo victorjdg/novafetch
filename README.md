@@ -59,6 +59,10 @@ novafetch -c|-cpu|-C|-CPU
 ```bash
 novafetch -m|-memory|-M|-MEMORY
 ```
+#### Resolution
+```
+novafetch -r|-resolution|-R|-RESOLUTION
+```
 #### GPU
 ```bash
 novafetch -g|-gpu|-G|-GPU
