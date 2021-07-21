@@ -1,52 +1,28 @@
 use std::process::Command;
+use std::collections::HashMap;
 
-fn parse_cpu_info(info: String) -> Vec<String> {
-    let mut res: Vec<String> = Vec::new();
+fn parse_cpu_info(info: String) -> HashMap<String, String> {
+    let mut res_hs = HashMap::new();
 
     let info_vec: Vec<&str> = info.lines().collect();
-    
-    // CPU core count
-    let cpu_long_core_count = info_vec[4].to_string();
-    let cpu_core_count: Vec<&str> = cpu_long_core_count.split_whitespace().collect();
-    res.push(cpu_core_count[cpu_core_count.len() - 1].to_string());
-    // CPU name
-    let cpu_long_name = info_vec[13].to_string();
-    let cpu_name: Vec<&str> = cpu_long_name.split("  ").collect();
-    let name_check = cpu_name[cpu_name.len() - 1].trim_start().to_string();
-    let vendor_check: Vec<&str> = name_check.split("@").collect();
-    if vendor_check.len() > 1 {
-        // Intel
-        res.push(vendor_check[0].trim_end().to_string());
-        // CPU max freq
-        let cpu_long_max_freq = info_vec[16].to_string();
-        let cpu_max_freq_str: Vec<&str> = cpu_long_max_freq.split_whitespace().collect();
-        let cpu_max_freq_f: f32 = cpu_max_freq_str[cpu_max_freq_str.len() - 1]
-            .to_string()
-            .replace(",", ".")
-            .parse().unwrap();
-        res.push((cpu_max_freq_f / 1000 as f32).to_string());
 
-    } else {
-        // AMD
-        res.push(vendor_check[0].to_string());
-        // CPU max freq
-        let cpu_long_max_freq = info_vec[17].to_string();
-        let cpu_max_freq_str: Vec<&str> = cpu_long_max_freq.split_whitespace().collect();
-        let cpu_max_freq_f: f32 = cpu_max_freq_str[cpu_max_freq_str.len() - 1]
-            .to_string()
-            .replace(",", ".")
-            .parse().unwrap();
-        res.push((cpu_max_freq_f / 1000 as f32).to_string());
+    // Split lines by ":" and store data in hashmap
+    for line in &info_vec{
+        let split: Vec<&str> = line.split(":").collect();
+        res_hs.insert(
+            split[0].to_string(),
+            split[1].to_string(),
+        );
     }
 
-    res
+    res_hs
 }
 
-fn pretty_cpu_info(vec_info: Vec<String>) -> String {
-    let model_name = &vec_info[1];
-    let core_count = &vec_info [0];
-    let max_frequency = &vec_info[2];
-    let res = format!("{} ({}) @ {} GHz", model_name, core_count, max_frequency);
+fn pretty_cpu_info(cpu_info: HashMap<String, String>) -> String {
+    let model_name: Vec<&str> = cpu_info["Model name"].split("                      ").collect();
+    let core_count: Vec<&str> = cpu_info["CPU(s)"].split("                          ").collect();
+    let max_frequency: Vec<&str> = cpu_info["CPU max MHz"].split("                     ").collect();
+    let res = format!("{} ({}) @ {} MHz", model_name[1], core_count[1], max_frequency[1]);
 
     res
 }
