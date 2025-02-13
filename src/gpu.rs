@@ -1,5 +1,5 @@
-use std::process::{Command, Stdio};
 use std::io::{Read, Write};
+use std::process::{Command, Stdio};
 
 fn parse_gpu_info(info: String) -> String {
     let p_info: Vec<&str> = info.split("VGA compatible controller: ").collect();
@@ -36,11 +36,10 @@ pub fn gpu_info() -> String {
             stdin.write_all(&buf).unwrap();
         }
     }
-    let gpu_info = parse_gpu_info(String::from_utf8_lossy(&gpu_info_command_grep
-                                           .wait_with_output()
-                                           .unwrap()
-                                           .stdout)
-        .to_string());
+    let gpu_info = parse_gpu_info(
+        String::from_utf8_lossy(&gpu_info_command_grep.wait_with_output().unwrap().stdout)
+            .to_string(),
+    );
     let res = pretty_gpu_info(gpu_info);
 
     res

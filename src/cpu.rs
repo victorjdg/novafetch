@@ -6,7 +6,6 @@ fn parse_cpu_info(info: String) -> HashMap<String, String> {
 
     let info_vec: Vec<&str> = info.lines().collect();
 
-    // Split lines by ":" and store data in hashmap
     for line in &info_vec {
         let split: Vec<&str> = line.split(":").collect();
         res_hs.insert(split[0].to_string(), split[1].to_string());
