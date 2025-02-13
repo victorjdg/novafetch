@@ -1,30 +1,21 @@
 use std::process::Command;
 
 pub fn packages_info(os: String) -> String {
-    let mut res = "SO not supported".to_string();
+    let (command, args) = match os {
+        _ if os.contains("Fedora") => ("dnf", vec!["list", "--installed"]),
+        _ if os.contains("Debian") => ("apt", vec!["list", "--installed"]),
+        _ => return "OS not supported".to_string(),
+    };
 
-    if os.contains("Fedora") {
-        let package_info_command = Command::new("dnf")
-            .arg("list")
-            .arg("--installed")
-            .output()
-            .expect("Failed to execute uptime command");
+    let package_info_command = Command::new(command)
+        .args(&args)
+        .output()
+        .expect("Failed to execute package manager command");
 
-        res = String::from_utf8_lossy(&package_info_command.stdout)
-            .lines()
-            .count()
-            .to_string();
-    } else if os.contains("Ubuntu") {
-        let package_info_command = Command::new("apt")
-            .arg("list")
-            .arg("--installed")
-            .output()
-            .expect("Failed to execute uptime command");
+    let res = String::from_utf8_lossy(&package_info_command.stdout)
+        .lines()
+        .count()
+        .to_string();
 
-        res = String::from_utf8_lossy(&package_info_command.stdout)
-            .lines()
-            .count()
-            .to_string();
-    }
     res
 }
