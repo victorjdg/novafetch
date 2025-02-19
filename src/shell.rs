@@ -10,7 +10,7 @@ pub fn shell_info() -> String {
     let res = String::from_utf8_lossy(&package_info_command.stdout)
         .split("/")
         .last()
-        .unwrap()
+        .expect("Error spliting the string")
         .trim()
         .to_string();
 
