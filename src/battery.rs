@@ -13,29 +13,27 @@ pub fn battery_info() -> String {
     for info in vec.iter() {
         if info.contains("model") {
             let details: Vec<&str> = info.split(":").collect();
-            values_map.insert(details[0].trim(), details[1].trim());
+            values_map.insert("model", details[1].trim());
         } else if info.contains("state") {
             let details: Vec<&str> = info.split(":").collect();
-            values_map.insert(details[0].trim(), details[1].trim());
+            values_map.insert("state", details[1].trim());
         } else if info.contains("percentage") {
             let details: Vec<&str> = info.split(":").collect();
-            values_map.insert(details[0].trim(), details[1].trim());
+            values_map.insert("percentage", details[1].trim());
         } else if info.contains("time") {
             let details: Vec<&str> = info.split(":").collect();
-            values_map.insert(details[0].trim(), details[1].trim());
+            values_map.insert("time", details[1].trim());
         }
-    }
-
-    for (key, val) in &values_map {
-        println!("{}: {}", key, val);
     }
 
     let res = format!(
         "{} [{}] | Time to empty {} | {}",
-        &values_map.get("percentage:").unwrap().to_string(),
-        &values_map.get("state:").unwrap().to_string(),
-        &values_map.get("tte:").unwrap().to_string(),
-        &values_map.get("model:").unwrap().to_string()
+        &values_map
+            .get("percentage")
+            .expect("Failed to get percentage value"),
+        &values_map.get("state").expect("Failed to get state value"),
+        &values_map.get("time").expect("Failed to get time value"),
+        &values_map.get("model").expect("Failed to get model value")
     );
     res
 }
