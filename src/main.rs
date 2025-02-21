@@ -45,6 +45,7 @@ fn main() {
                 }
                 "-ms" | "-MS" | "-swap" | "-SWAP" => println!("Swap: {}", memory_info("swap")),
                 "-d" | "-D" | "-disk" | "-DISK" => println!("Disk (/): {}", gpu_info()),
+                "-b" | "-B" | "-battery" | "-BATTERY" => println!("Battery: {}", battery_info()),
                 _ => println!("Invalid option {}", option),
             }
         }
