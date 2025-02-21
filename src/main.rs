@@ -35,16 +35,20 @@ fn main() {
                 "-h" | "-H" | "-host" | "-HOST" => println!("Host: {}", host_info()),
                 "-k" | "-K" | "-kernel" | "-KERNEL" => println!("Kernel: {}", kernel_info()),
                 "-u" | "-U" | "-uptime" | "-UPTIME" => println!("Uptime: {}", uptime_info()),
-                "-p" | "-P" | "-packages" | "-PACKAGES" => println!("Packages: {}", uptime_info()),
-                "-s" | "-S" | "-shell" | "-SHELL" => println!("Shell: {}", uptime_info()),
-                "-t" | "-T" | "-terminal" | "-TERMINAL" => println!("Terminal: {}", uptime_info()),
+                "-p" | "-P" | "-packages" | "-PACKAGES" => {
+                    println!("Packages: {}", packages_info(os_info()))
+                }
+                "-s" | "-S" | "-shell" | "-SHELL" => println!("Shell: {}", shell_info()),
+                "-t" | "-T" | "-terminal" | "-TERMINAL" => {
+                    println!("Terminal: {}", terminal_info())
+                }
                 "-c" | "-C" | "-cpu" | "-CPU" => println!("CPU: {}", cpu_info()),
                 "-g" | "-G" | "-gpu" | "-GPU" => println!("GPU: {}", gpu_info()),
                 "-m" | "-M" | "-memory" | "-MEMORY" => {
                     println!("Memory: {}", memory_info("memory"))
                 }
                 "-ms" | "-MS" | "-swap" | "-SWAP" => println!("Swap: {}", memory_info("swap")),
-                "-d" | "-D" | "-disk" | "-DISK" => println!("Disk (/): {}", gpu_info()),
+                "-d" | "-D" | "-disk" | "-DISK" => println!("Disk (/): {}", disk_info()),
                 "-b" | "-B" | "-battery" | "-BATTERY" => println!("Battery: {}", battery_info()),
                 _ => println!("Invalid option {}", option),
             }

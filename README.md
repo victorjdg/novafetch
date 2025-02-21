@@ -39,21 +39,21 @@ novafetch
 ```
 
 ### Arguments supported
-| Short Options | Long Options       | Description                          | Command Executed                          |
-|---------------|--------------------|--------------------------------------|-------------------------------------------|
-| `-o`          | `-O`, `-os`, `-OS` | Displays operating system information | `println!("OS: {}", os_info())`           |
-| `-h`          | `-H`, `-host`, `-HOST` | Displays host information           | `println!("Host: {}", host_info())`       |
-| `-k`          | `-K`, `-kernel`, `-KERNEL` | Displays kernel information         | `println!("Kernel: {}", kernel_info())`   |
-| `-u`          | `-U`, `-uptime`, `-UPTIME` | Displays system uptime              | `println!("Uptime: {}", uptime_info())`   |
-| `-p`          | `-P`, `-packages`, `-PACKAGES` | Displays package information       | `println!("Packages: {}", uptime_info())` |
-| `-s`          | `-S`, `-shell`, `-SHELL` | Displays shell information          | `println!("Shell: {}", uptime_info())`    |
-| `-t`          | `-T`, `-terminal`, `-TERMINAL` | Displays terminal information      | `println!("Terminal: {}", uptime_info())` |
-| `-c`          | `-C`, `-cpu`, `-CPU` | Displays CPU information             | `println!("CPU: {}", cpu_info())`         |
-| `-g`          | `-G`, `-gpu`, `-GPU` | Displays GPU information             | `println!("GPU: {}", gpu_info())`         |
-| `-m`          | `-M`, `-memory`, `-MEMORY` | Displays memory information         | `println!("Memory: {}", memory_info("memory"))` |
-| `-ms`         | `-MS`, `-swap`, `-SWAP` | Displays swap information            | `println!("Swap: {}", memory_info("swap"))`|
-| `-d`          | `-D`, `-disk`, `-DISK` | Displays disk information (/)       | `println!("Disk (/): {}", gpu_info())`    |
-| `-b`          | `-B`, `-battery`, `-BATTERY` | Displays battery information       | `println!("Battery: {}", battery_info())` |
+| Short Options | Long Options       | Description                          |
+|---------------|--------------------|--------------------------------------|
+| `-o`          | `-O`, `-os`, `-OS` | Displays operating system information |
+| `-h`          | `-H`, `-host`, `-HOST` | Displays host information |
+| `-k`          | `-K`, `-kernel`, `-KERNEL` | Displays kernel information |
+| `-u`          | `-U`, `-uptime`, `-UPTIME` | Displays system uptime |
+| `-p`          | `-P`, `-packages`, `-PACKAGES` | Displays package information |
+| `-s`          | `-S`, `-shell`, `-SHELL` | Displays shell information |
+| `-t`          | `-T`, `-terminal`, `-TERMINAL` | Displays terminal information |
+| `-c`          | `-C`, `-cpu`, `-CPU` | Displays CPU information |
+| `-g`          | `-G`, `-gpu`, `-GPU` | Displays GPU information |
+| `-m`          | `-M`, `-memory`, `-MEMORY` | Displays memory information |
+| `-ms`         | `-MS`, `-swap`, `-SWAP` | Displays swap information |
+| `-d`          | `-D`, `-disk`, `-DISK` | Displays disk information (/) |
+| `-b`          | `-B`, `-battery`, `-BATTERY` | Displays battery information |
 
 It also supports multiple options, example:
 ```bash
