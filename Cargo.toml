@@ -1,9 +1,18 @@
 [package]
 name = "novafetch"
-version = "0.2.0"
+version = "0.3.0"
 authors = ["Víctor Javier Díaz Garrido <vjdiaz@proton.me>"]
-edition = "2018"
+edition = "2021"
+description = "A command-line system information fetch tool for Linux"
+license = "GPL-3.0"
+repository = "https://github.com/UnversedBlood/novafetch"
+keywords = ["fetch", "system-info", "cli", "linux"]
+categories = ["command-line-utilities"]
+rust-version = "1.56"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.release]
+opt-level = 3
+lto = true
+strip = true
 
 [dependencies]

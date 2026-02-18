@@ -1,39 +1,37 @@
-use std::{collections::HashMap, process::Command};
+use std::process::Command;
 
 pub fn battery_info() -> String {
-    let memory_info_command = Command::new("upower")
+    let output = Command::new("upower")
         .arg("-d")
-        .output()
-        .expect("Failed to execute upower command");
+        .output();
+    
+    let stdout = match output {
+        Ok(output) => String::from_utf8_lossy(&output.stdout).to_string(),
+        Err(_) => return "N/A".to_string(),
+    };
 
-    let binding = String::from_utf8_lossy(&memory_info_command.stdout);
-    let vec: Vec<&str> = binding.lines().collect();
-    let mut values_map: HashMap<&str, &str> = HashMap::new();
+    let mut percentage = "N/A";
+    let mut state = "N/A";
+    let mut time = "N/A";
+    let mut model = "Unknown";
 
-    for info in vec.iter() {
-        if info.contains("model") {
-            let details: Vec<&str> = info.split(":").collect();
-            values_map.insert("model", details[1].trim());
-        } else if info.contains("state") {
-            let details: Vec<&str> = info.split(":").collect();
-            values_map.insert("state", details[1].trim());
-        } else if info.contains("percentage") {
-            let details: Vec<&str> = info.split(":").collect();
-            values_map.insert("percentage", details[1].trim());
-        } else if info.contains("time") {
-            let details: Vec<&str> = info.split(":").collect();
-            values_map.insert("time", details[1].trim());
+    for line in stdout.lines() {
+        let line = line.trim();
+        if let Some((key, value)) = line.split_once(':') {
+            let key = key.trim();
+            let value = value.trim();
+            
+            if key == "percentage" {
+                percentage = value;
+            } else if key == "state" {
+                state = value;
+            } else if key == "time to empty" || key == "time to full" {
+                time = value;
+            } else if key == "model" {
+                model = value;
+            }
         }
     }
 
-    let res = format!(
-        "{} [{}] | Time to empty {} | {}",
-        &values_map
-            .get("percentage")
-            .expect("Failed to get percentage value"),
-        &values_map.get("state").expect("Failed to get state value"),
-        &values_map.get("time").expect("Failed to get time value"),
-        &values_map.get("model").expect("Failed to get model value")
-    );
-    res
+    format!("{} [{}] | Time: {} | {}", percentage, state, time, model)
 }

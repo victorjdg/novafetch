@@ -1,18 +1,10 @@
-use std::process::Command;
+use std::env;
 
 pub fn shell_info() -> String {
-    let package_info_command = Command::new("sh")
-        .arg("-c")
-        .arg("echo $SHELL")
-        .output()
-        .expect("Failed to execute echo $SHELL command");
-
-    let res = String::from_utf8_lossy(&package_info_command.stdout)
-        .split("/")
+    env::var("SHELL")
+        .unwrap_or_else(|_| "/bin/sh".to_string())
+        .split('/')
         .last()
-        .expect("Error spliting the string")
-        .trim()
-        .to_string();
-
-    res
+        .unwrap_or("sh")
+        .to_string()
 }

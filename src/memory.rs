@@ -1,36 +1,44 @@
 use std::process::Command;
 
 pub fn memory_info(tp: &str) -> String {
-    let memory_info_command = Command::new("free")
-        .arg("-m")
-        .output()
-        .expect("Failed to execute free command");
+    let output = match Command::new("free").arg("-m").output() {
+        Ok(out) => out,
+        Err(_) => return "N/A".to_string(),
+    };
 
-    let mem_type = match tp {
-        _ if tp.eq("memory") => 1,
-        _ if tp.eq("swap") => 2,
+    let line_idx = match tp {
+        "memory" => 1,
+        "swap" => 2,
         _ => return "Memory type not supported".to_string(),
     };
 
-    let binding = String::from_utf8_lossy(&memory_info_command.stdout);
-    let vec: Vec<&str> = binding.lines().collect();
-
-    let mut values = Vec::new();
-    let mut current_value = String::new();
-
-    for c in vec[mem_type].chars() {
-        if c.is_digit(10) {
-            current_value.push(c);
-        } else if !current_value.is_empty() {
-            values.push(current_value.clone());
-            current_value.clear();
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    let lines: Vec<&str> = stdout.lines().collect();
+    
+    let line = match lines.get(line_idx) {
+        Some(line) => line,
+        None => return "N/A".to_string(),
+    };
+    let values: Vec<u64> = line
+        .split_whitespace()
+        .skip(1)
+        .filter_map(|s| s.parse().ok())
+        .collect();
+    
+    if values.len() >= 2 {
+        let used = values[1];
+        let total = values[0];
+        if tp == "swap" && total == 0 {
+            "No swap".to_string()
+        } else {
+            let percentage = if total > 0 {
+                (used * 100) / total
+            } else {
+                0
+            };
+            format!("{} / {} Mi ({}%)", used, total, percentage)
         }
+    } else {
+        "N/A".to_string()
     }
-
-    if !current_value.is_empty() {
-        values.push(current_value);
-    }
-
-    let res = format!("{} / {} Mi", values[1], values[0]);
-    res
 }
