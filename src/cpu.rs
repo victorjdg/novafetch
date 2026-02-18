@@ -4,35 +4,29 @@ use std::process::Command;
 fn parse_cpu_info(info: String) -> HashMap<String, String> {
     let mut res_hs = HashMap::new();
 
-    let info_vec: Vec<&str> = info.lines().collect();
-
-    for line in &info_vec {
-        let split: Vec<&str> = line.split(":").collect();
-        res_hs.insert(split[0].to_string(), split[1].to_string());
+    for line in info.lines() {
+        if let Some((key, value)) = line.split_once(':') {
+            res_hs.insert(key.trim().to_string(), value.trim().to_string());
+        }
     }
 
     res_hs
 }
 
 fn pretty_cpu_info(cpu_info: HashMap<String, String>) -> String {
-    let model_name: Vec<&str> = cpu_info["Model name"].split(":").collect();
-    let core_count: Vec<&str> = cpu_info["CPU(s)"].split(":").collect();
-    let max_frequency: Vec<&str> = cpu_info["CPU max MHz"].split(":").collect();
-    let res = format!(
-        "{} ({}) @ {} MHz",
-        model_name[0].trim(),
-        core_count[0].trim(),
-        max_frequency[0].trim()
-    );
-
-    res
+    let model_name = cpu_info.get("Model name").map(|s| s.as_str()).unwrap_or("Unknown");
+    let core_count = cpu_info.get("CPU(s)").map(|s| s.as_str()).unwrap_or("?");
+    let max_frequency = cpu_info.get("CPU max MHz").map(|s| s.as_str()).unwrap_or("?");
+    
+    format!("{} ({}) @ {} MHz", model_name, core_count, max_frequency)
 }
 
 pub fn cpu_info() -> String {
-    let cpu_info_command = Command::new("lscpu")
-        .output()
-        .expect("Failed to execute lscpu command");
-    let cpu_info = parse_cpu_info(String::from_utf8_lossy(&cpu_info_command.stdout).to_string());
-    let res = pretty_cpu_info(cpu_info);
-    res
+    match Command::new("lscpu").output() {
+        Ok(output) => {
+            let cpu_info = parse_cpu_info(String::from_utf8_lossy(&output.stdout).to_string());
+            pretty_cpu_info(cpu_info)
+        }
+        Err(_) => "N/A".to_string(),
+    }
 }
