@@ -12,5 +12,5 @@ $(CLI_EXEC) $(RUSTFETCH_EXEC_RELEASE):
 install:
 	install -D -m755 $(RUST_RELEASE_BIN_DIR)/$(CLI_EXEC) $(PREFIX)/bin/
 
-unistall:
+uninstall:
 	- rm -f $(PREFIX)/bin/$(CLI_EXEC)

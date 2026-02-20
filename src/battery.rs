@@ -1,14 +1,13 @@
+use crate::error::FetchError;
 use std::process::Command;
 
-pub fn battery_info() -> String {
+pub fn battery_info() -> Result<String, FetchError> {
     let output = Command::new("upower")
         .arg("-d")
-        .output();
-    
-    let stdout = match output {
-        Ok(output) => String::from_utf8_lossy(&output.stdout).to_string(),
-        Err(_) => return "N/A".to_string(),
-    };
+        .output()
+        .map_err(|e| FetchError::CommandFailed(format!("upower: {}", e)))?;
+
+    let stdout = String::from_utf8_lossy(&output.stdout);
 
     let mut percentage = "N/A";
     let mut state = "N/A";
@@ -20,18 +19,23 @@ pub fn battery_info() -> String {
         if let Some((key, value)) = line.split_once(':') {
             let key = key.trim();
             let value = value.trim();
-            
-            if key == "percentage" {
-                percentage = value;
-            } else if key == "state" {
-                state = value;
-            } else if key == "time to empty" || key == "time to full" {
-                time = value;
-            } else if key == "model" {
-                model = value;
+
+            match key {
+                "percentage" => percentage = value,
+                "state" => state = value,
+                "time to empty" | "time to full" => time = value,
+                "model" => model = value,
+                _ => {}
             }
         }
     }
 
-    format!("{} [{}] | Time: {} | {}", percentage, state, time, model)
+    if percentage == "N/A" && state == "N/A" {
+        return Err(FetchError::NotFound);
+    }
+
+    Ok(format!(
+        "{} [{}] | Time: {} | {}",
+        percentage, state, time, model
+    ))
 }
