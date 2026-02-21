@@ -1,32 +1,16 @@
-use std::collections::HashMap;
-
-fn parse_os_info(info: String) -> HashMap<String, String> {
-    let mut res: HashMap<String, String> = HashMap::new();
-
-    for line in info.lines() {
-        if let Some((key, value)) = line.split_once('=') {
-            let value_clean = value.trim_matches('"').to_string();
-            res.insert(key.to_string(), value_clean);
-        }
-    }
-
-    res
-}
-
-fn pretty_os_info(os_info: HashMap<String, String>) -> String {
-    os_info.get("PRETTY_NAME")
-        .cloned()
-        .unwrap_or_else(|| "Unknown OS".to_string())
-}
-
+use crate::error::FetchError;
+use crate::parser::parse_key_value;
 use std::fs;
 
-pub fn os_info() -> String {
-    match fs::read_to_string("/etc/os-release") {
-        Ok(content) => {
-            let os_info = parse_os_info(content);
-            pretty_os_info(os_info)
-        }
-        Err(_) => "Unknown OS".to_string(),
-    }
+fn pretty_os_info(os_info: std::collections::HashMap<String, String>) -> Result<String, FetchError> {
+    os_info
+        .get("PRETTY_NAME")
+        .cloned()
+        .ok_or_else(|| FetchError::ParseFailed("PRETTY_NAME not found".to_string()))
+}
+
+pub fn os_info() -> Result<String, FetchError> {
+    let content = fs::read_to_string("/etc/os-release")?;
+    let os_info = parse_key_value(&content, '=', true);
+    pretty_os_info(os_info)
 }

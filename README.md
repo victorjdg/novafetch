@@ -83,26 +83,26 @@ novafetch -c -g -m    # Show only CPU, GPU, and Memory
 
 ### Available Options
 
-| Short | Long Options | Description |
-|-------|--------------|-------------|
-| `-o` | `-os`, `-OS` | Operating system |
-| `-h` | `-host`, `-HOST` | Host name |
-| `-k` | `-kernel`, `-KERNEL` | Kernel version |
-| `-u` | `-uptime`, `-UPTIME` | System uptime |
-| `-p` | `-packages`, `-PACKAGES` | Package count |
-| `-s` | `-shell`, `-SHELL` | Current shell |
-| `-t` | `-terminal`, `-TERMINAL` | Terminal type |
-| `-de` | `-desktop`, `-DESKTOP` | Desktop Environment / Window Manager |
-| `-r` | `-res`, `-resolution` | Screen resolution |
-| `-th` | `-theme`, `-THEME` | GTK theme, icons, cursor |
-| `-c` | `-cpu`, `-CPU` | CPU information |
-| `-temp` | `-TEMP` | CPU temperature |
-| `-g` | `-gpu`, `-GPU` | GPU information |
-| `-m` | `-memory`, `-MEMORY` | Memory usage |
-| `-ms` | `-swap`, `-SWAP` | Swap usage |
-| `-d` | `-disk`, `-DISK` | Disk usage (/) |
-| `-ds` | `-disks`, `-DISKS` | All disk partitions |
-| `-b` | `-battery`, `-BATTERY` | Battery status |
+| Short | Long | Description |
+|-------|------|-------------|
+| `-o` | `--os` | Operating system |
+| `-h` | `--host` | Host name |
+| `-k` | `--kernel` | Kernel version |
+| `-u` | `--uptime` | System uptime |
+| `-p` | `--packages` | Package count |
+| `-s` | `--shell` | Current shell |
+| `-t` | `--terminal` | Terminal type |
+| | `--desktop` | Desktop Environment / Window Manager |
+| `-r` | `--resolution` | Screen resolution |
+| | `--theme` | GTK theme, icons, cursor |
+| `-c` | `--cpu` | CPU information |
+| | `--temp` | CPU temperature |
+| `-g` | `--gpu` | GPU information |
+| `-m` | `--memory` | Memory usage |
+| | `--swap` | Swap usage |
+| `-d` | `--disk` | Disk usage (/) |
+| | `--disks` | All disk partitions |
+| `-b` | `--battery` | Battery status |
 | `-v` | `--version` | Show version |
 | | `--help` | Show help message |
 
@@ -114,11 +114,21 @@ cargo run
 
 # Run with arguments
 cargo run -- -c -g -u
+
+# Run tests
+cargo test
+
+# Run tests with output
+cargo test -- --nocapture
 ```
 
 ## Dependencies
 
-### Required
+### Build Dependencies
+- Rust toolchain (cargo >= 1.56)
+- make (optional)
+
+### Runtime Dependencies (Required)
 - `hostname`, `uname`, `uptime`
 - `lscpu` (CPU info)
 - `lspci` (GPU info)
@@ -150,24 +160,23 @@ cargo run -- -c -g -u
 ## Example Output
 
 ```
-OS: Fedora Linux 40 (Workstation Edition)
+OS: Linux Mint 22.2
 Host: myhostname
-Kernel: 6.8.5-301.fc40.x86_64
+Kernel: 6.14.0-37-generic
 Uptime: 3 hours, 42 minutes
-Packages: 2150 (dnf)
-Shell: /bin/bash
+Packages: 2199
+Shell: bash
 Terminal: xterm-256color
-Desktop: GNOME
-Resolution: 1920x1080
-Theme: Adwaita-dark [GTK2/3]
-Icons: Papirus [GTK2/3]
-CPU: AMD Ryzen 7 5800X (16) @ 3.800GHz
-Temperature: 45°C
-GPU: NVIDIA GeForce RTX 3070
-Memory: 6423 MiB / 32036 MiB (20%)
+DE/WM: Cinnamon
+Resolution: 3440x1440 @ 60.00Hz
+Theme: Theme: Mint-Y-Purple | Icons: Mint-Y-Purple | Cursor: Bibata-Modern-Classic
+CPU: Intel(R) Core(TM) i7-1185G7 @ 3.00GHz (8) @ 4800 MHz
+CPU Temp: 59.4°C (avg) / 64.0°C (max)
+GPU: TigerLake-LP GT2
+Memory: 8617 / 31881 Mi (27%)
 Swap: No swap
-Disk (/): 45G / 100G (45%)
-Battery: 85% [Discharging]
+Disk: 64G / 417G (17%)
+Battery: 80% [charging] | Time: N/A | Wireless Keyboard
 ```
 
 ## Special Thanks

@@ -1,66 +1,62 @@
+use crate::error::FetchError;
 use std::env;
 use std::process::Command;
 
-pub fn desktop_info() -> String {
-    // Intentar obtener desde variables de entorno (más común)
+pub fn desktop_info() -> Result<String, FetchError> {
     if let Ok(de) = env::var("XDG_CURRENT_DESKTOP") {
         if !de.is_empty() {
-            return format_de(&de);
+            return Ok(format_de(&de));
         }
     }
-    
+
     if let Ok(de) = env::var("DESKTOP_SESSION") {
         if !de.is_empty() {
-            return format_de(&de);
+            return Ok(format_de(&de));
         }
     }
-    
-    if let Ok(de) = env::var("GNOME_DESKTOP_SESSION_ID") {
-        if !de.is_empty() {
-            return "GNOME".to_string();
-        }
+
+    if env::var("GNOME_DESKTOP_SESSION_ID").is_ok() {
+        return Ok("GNOME".to_string());
     }
-    
-    // Detectar Wayland compositors específicos
+
     if env::var("WAYLAND_DISPLAY").is_ok() {
         if let Ok(wayland_display) = env::var("WAYLAND_DISPLAY") {
             if wayland_display.contains("sway") {
-                return "sway".to_string();
+                return Ok("sway".to_string());
             }
             if wayland_display.contains("wayfire") {
-                return "Wayfire".to_string();
+                return Ok("Wayfire".to_string());
             }
         }
-        
-        // Detectar Hyprland
+
         if env::var("HYPRLAND_INSTANCE_SIGNATURE").is_ok() {
-            return "Hyprland".to_string();
+            return Ok("Hyprland".to_string());
         }
     }
-    
-    // Intentar detectar sesión con loginctl
-    if let Ok(output) = Command::new("loginctl").args(["show-session", "self", "-p", "Desktop"]).output() {
+
+    if let Ok(output) = Command::new("loginctl")
+        .args(["show-session", "self", "-p", "Desktop"])
+        .output()
+    {
         let stdout = String::from_utf8_lossy(&output.stdout);
         if let Some((_, value)) = stdout.split_once('=') {
             let value = value.trim();
             if !value.is_empty() && value != "Desktop=" {
-                return format_de(value);
+                return Ok(format_de(value));
             }
         }
     }
-    
-    // Intentar detectar i3/sway desde el proceso
+
     if env::var("I3SOCK").is_ok() {
-        return "i3".to_string();
+        return Ok("i3".to_string());
     }
-    
+
     if let Ok(sw_sock) = env::var("SWAYSOCK") {
         if !sw_sock.is_empty() {
-            return "sway".to_string();
+            return Ok("sway".to_string());
         }
     }
-    
-    // Detectar bspwm, dwm, awesome, etc. desde procesos
+
     if let Ok(output) = Command::new("ps").args(["-e", "-o", "comm="]).output() {
         let stdout = String::from_utf8_lossy(&output.stdout);
         for line in stdout.lines() {
@@ -79,11 +75,11 @@ pub fn desktop_info() -> String {
                 "dwl" => "dwl",
                 _ => continue,
             };
-            return wm.to_string();
+            return Ok(wm.to_string());
         }
     }
-    
-    "Unknown".to_string()
+
+    Err(FetchError::NotFound)
 }
 
 fn format_de(de: &str) -> String {
